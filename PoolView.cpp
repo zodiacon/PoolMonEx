@@ -74,7 +74,7 @@ BOOL CPoolView::OnEraseBkgnd(CDC* pDC) {
 
 void CPoolView::OnEditCopy()
 {
-	// TODO: Add your command handler code here
+	m_List.CopyToClipboard();
 }
 
 

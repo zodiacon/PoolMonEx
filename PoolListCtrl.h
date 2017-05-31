@@ -14,6 +14,7 @@ public:
 	COLORREF OnGetCellBkColor(int row, int col);
 
 	void Pause(bool pause);
+	void CopyToClipboard();
 
 	static const unsigned NonPagedBit = 0x80000000;
 
@@ -25,7 +26,7 @@ private:
     };
 
 	CImageList m_Images;
-	std::map<ULONG, PoolTagInfo> m_Tags;
+	std::map<ULONG_PTR, PoolTagInfo> m_Tags;
 	std::map<std::pair<int, int>, COLORREF> m_CellColors;
 
 	int m_SortColumn = -1;
