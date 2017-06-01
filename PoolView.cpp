@@ -25,6 +25,7 @@ BEGIN_MESSAGE_MAP(CPoolView, CWnd)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_ERASEBKGND()
+	ON_COMMAND(ID_FILE_SAVE32771, &CPoolView::OnFileSave)
 	ON_COMMAND(ID_EDIT_COPY, &CPoolView::OnEditCopy)
 	ON_COMMAND(ID_VIEW_PAUSE, &CPoolView::OnViewPause)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_PAUSE, &CPoolView::OnUpdateViewPause)
@@ -72,6 +73,12 @@ BOOL CPoolView::OnEraseBkgnd(CDC* pDC) {
 }
 
 
+void CPoolView::OnFileSave()
+{
+	m_List.SaveToFile();
+}
+
+
 void CPoolView::OnEditCopy()
 {
 	m_List.CopyToClipboard();
@@ -96,5 +103,5 @@ void CPoolView::OnViewPause()
 
 void CPoolView::OnUpdateViewPause(CCmdUI *pCmdUI)
 {
-	pCmdUI->SetText(m_Paused ? L"Resume" : L"Pause");
+	pCmdUI->SetText(m_Paused ? L"R&esume" : L"&Pause");
 }

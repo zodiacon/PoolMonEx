@@ -14,7 +14,9 @@ public:
 	COLORREF OnGetCellBkColor(int row, int col);
 
 	void Pause(bool pause);
+	CString GetLine(int nItem);
 	void CopyToClipboard();
+	void SaveToFile();
 
 	static const unsigned NonPagedBit = 0x80000000;
 
