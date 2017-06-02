@@ -133,7 +133,7 @@ BEGIN
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
     VK_SPACE,       ID_VIEW_PAUSE,          VIRTKEY, NOINVERT
     VK_F5,          ID_VIEW_REFRESH,        VIRTKEY, NOINVERT
-	"S",            ID_FILE_SAVE32771,      VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE32771,      VIRTKEY, CONTROL, NOINVERT
 END
 
 
@@ -276,7 +276,7 @@ STRINGTABLE
 BEGIN
     ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
     ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
-	ID_FILE_SAVE32771       "Save the current document\nSave"
+    ID_FILE_SAVE32771       "Save the current document\nSave"
 END
 
 STRINGTABLE
@@ -295,8 +295,8 @@ END
 STRINGTABLE
 BEGIN
     ID_VIEW_REFRESH         "Force Kernel Pool Monitor to update now, regardless to Refresh Interval setting"
-	ID_VIEW_PAUSE           "Display does not update automatically"
-	ID_VIEW_DYNAMICSORT     "Enable or disable dynamic sorting"
+    ID_VIEW_PAUSE           "Display does not update automatically"
+    ID_VIEW_DYNAMICSORT     "Enable or disable dynamic sorting"
     ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle Status Bar"
 END
 

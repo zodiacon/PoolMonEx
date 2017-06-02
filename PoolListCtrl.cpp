@@ -461,19 +461,19 @@ void CPoolListCtrl::Pause(bool pause)
 
 CString CPoolListCtrl::GetLine(int nItem)
 {
-	CString data;
+    CString data;
 
-	data += GetItemText(nItem, ColumnType::TagName) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::PoolType) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::Allocs) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::Frees) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::Diff) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::Usage) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::UsageKB) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::PerAlloc) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::SourceName) + TEXT("\t");
-	data += GetItemText(nItem, ColumnType::SourceDescription);
-	return data;
+    data += GetItemText(nItem, ColumnType::TagName) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::PoolType) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Allocs) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Frees) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Diff) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Usage) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::UsageKB) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::PerAlloc) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::SourceName) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::SourceDescription);
+    return data;
 }
 
 void CPoolListCtrl::CopyToClipboard()
@@ -522,51 +522,51 @@ void CPoolListCtrl::CopyToClipboard()
 
 void CPoolListCtrl::SaveToFile()
 {
-	CFileDialog fileDlg(
-		FALSE, // save as
-		TEXT(".txt"), // 
-		TEXT("poolmon.txt"), 
-		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-		TEXT("Text Documents (*.txt)|*.txt|All Files(*.*)|*.*||"), 
-		this
-	);
-	INT_PTR res = fileDlg.DoModal();
-	if (res != IDOK)
-		return; // user canceled
+    CFileDialog fileDlg(
+        FALSE, // save as
+        TEXT(".txt"), // 
+        TEXT("poolmon.txt"), 
+        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+        TEXT("Text Documents (*.txt)|*.txt|All Files(*.*)|*.*||"), 
+        this
+    );
+    INT_PTR res = fileDlg.DoModal();
+    if (res != IDOK)
+        return; // user canceled
 
-	CString path = fileDlg.GetPathName();
-	try
-	{
-		CStdioFile file(path, 
-			CFile::typeUnicode | CFile::modeCreate | CFile::modeWrite, 
-			NULL);
+    CString path = fileDlg.GetPathName();
+    try
+    {
+        CStdioFile file(path, 
+            CFile::typeUnicode | CFile::modeCreate | CFile::modeWrite, 
+            NULL);
 
-		file.WriteString(
-			TEXT("TagName\t")
-			TEXT("PoolType\t")
-			TEXT("Allocs\t")
-			TEXT("Frees\t")
-			TEXT("Diff\t")
-			TEXT("Usage\t")
-			TEXT("UsageKB\t")
-			TEXT("PerAlloc\t")
-			TEXT("SourceName\t")
-			TEXT("SourceDescription\n")
-		);
-		LockWindowUpdate();
-		for (int i = 0; i < GetItemCount(); ++i)
-		{
-			file.WriteString(GetLine(i)+TEXT("\n"));
-		}
-		UnlockWindowUpdate();
+        file.WriteString(
+            TEXT("TagName\t")
+            TEXT("PoolType\t")
+            TEXT("Allocs\t")
+            TEXT("Frees\t")
+            TEXT("Diff\t")
+            TEXT("Usage\t")
+            TEXT("UsageKB\t")
+            TEXT("PerAlloc\t")
+            TEXT("SourceName\t")
+            TEXT("SourceDescription\n")
+        );
+        LockWindowUpdate();
+        for (int i = 0; i < GetItemCount(); ++i)
+        {
+            file.WriteString(GetLine(i)+TEXT("\n"));
+        }
+        UnlockWindowUpdate();
 
-		file.Close();
-	}
-	catch (CFileException* e)
-	{
-		TRACE(_T("File could not be opened, cause = %d\n"),
-			e->m_cause);
-	}
+        file.Close();
+    }
+    catch (CFileException* e)
+    {
+        TRACE(_T("File could not be opened, cause = %d\n"),
+            e->m_cause);
+    }
 }
 
 void CPoolListCtrl::OnTimer(UINT_PTR nIDEvent)
