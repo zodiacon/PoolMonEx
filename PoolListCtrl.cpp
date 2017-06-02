@@ -459,6 +459,116 @@ void CPoolListCtrl::Pause(bool pause)
     m_Paused = pause;
 }
 
+CString CPoolListCtrl::GetLine(int nItem)
+{
+    CString data;
+
+    data += GetItemText(nItem, ColumnType::TagName) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::PoolType) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Allocs) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Frees) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Diff) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::Usage) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::UsageKB) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::PerAlloc) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::SourceName) + TEXT("\t");
+    data += GetItemText(nItem, ColumnType::SourceDescription);
+    return data;
+}
+
+void CPoolListCtrl::CopyToClipboard()
+{
+    // Retrieve the selection item of a list view control.
+    int nItem = GetSelectionMark();
+    if (nItem == -1)
+    {
+        AfxMessageBox(TEXT("You must choose an item from the list."), MB_OK | MB_ICONERROR);
+        return;
+    }
+
+    // Retrieve pool information from the selection line.
+    CString cbData = GetLine(nItem);
+    int len = cbData.GetLength();
+    ASSERT(len > 1);
+
+    // Copy pool information to Clipboard
+    if (OpenClipboard())
+    {
+        // Empty the Clipboard first. Windows frees the memory associated
+        // with any data that is in the Clipboard
+        EmptyClipboard();
+
+        LPCTSTR lpText = cbData.GetBuffer();
+        // allocate a block of data equal to the text in cbData
+        HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, (len + 1) * sizeof(TCHAR));
+        
+        // get a pointer to the data associated with the handle returned from
+        // GlobalAlloc() via GlobalLock(). And then, copy the data to the global memory.
+        memcpy(GlobalLock(hMem), lpText, (len + 1) * sizeof(WCHAR));
+
+        // unlock the memory. Windows will free the memory when EmptyClipboard() is called
+        GlobalUnlock(hMem);
+        
+#if defined UNICODE || defined _UNICODE
+        SetClipboardData(CF_UNICODETEXT, hMem);
+#else
+        SetClipboardData(CF_TEXT, hMem);
+#endif
+
+        CloseClipboard();
+        cbData.ReleaseBuffer();
+    }
+}
+
+void CPoolListCtrl::SaveToFile()
+{
+    CFileDialog fileDlg(
+        FALSE, // save as
+        TEXT(".txt"), // 
+        TEXT("poolmon.txt"), 
+        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+        TEXT("Text Documents (*.txt)|*.txt|All Files(*.*)|*.*||"), 
+        this
+    );
+    INT_PTR res = fileDlg.DoModal();
+    if (res != IDOK)
+        return; // user canceled
+
+    CString path = fileDlg.GetPathName();
+    try
+    {
+        CStdioFile file(path, 
+            CFile::typeUnicode | CFile::modeCreate | CFile::modeWrite, 
+            NULL);
+
+        file.WriteString(
+            TEXT("TagName\t")
+            TEXT("PoolType\t")
+            TEXT("Allocs\t")
+            TEXT("Frees\t")
+            TEXT("Diff\t")
+            TEXT("Usage\t")
+            TEXT("UsageKB\t")
+            TEXT("PerAlloc\t")
+            TEXT("SourceName\t")
+            TEXT("SourceDescription\n")
+        );
+        LockWindowUpdate();
+        for (int i = 0; i < GetItemCount(); ++i)
+        {
+            file.WriteString(GetLine(i)+TEXT("\n"));
+        }
+        UnlockWindowUpdate();
+
+        file.Close();
+    }
+    catch (CFileException* e)
+    {
+        TRACE(_T("File could not be opened, cause = %d\n"),
+            e->m_cause);
+    }
+}
+
 void CPoolListCtrl::OnTimer(UINT_PTR nIDEvent)
 {
     if (nIDEvent == 1) {

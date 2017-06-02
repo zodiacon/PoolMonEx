@@ -47,6 +47,7 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnEditCopy();
+	afx_msg void OnFileSave();
 	afx_msg void OnViewPause();
 	afx_msg void OnUpdateViewPause(CCmdUI *pCmdUI);
 };
